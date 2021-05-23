@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<h1>Account Settings</h1>
+{% endblock %}
+
+{% block content %}
+<h2>Change Username</h2>
+<div class="card">
+  <form method="POST" id="change-username-form">
+    <p style="text-align: center;" class="comment-send-box"><input type="text" name="username" maxlength="24" autocomplete="off" placeholder="Enter a new username" id="create-username"> <input type="submit" value="&#8593;"></p>
+  </form>
+</div>
+<h2>Change Password</h2>
+<div class="card">
+  <form method="POST" id="change-password-form">
+    <p style="text-align: center;"><input type="password" name="p1" maxlength="256" placeholder="New password"></p>
+    <p style="text-align: center;"><input type="password" name="p2" maxlength="256" placeholder="Confirm password"></p>
+    <p style="text-align: center;"><input type="submit" value="Change" class="submit-button"></p>
+  </form>
+</div>
+<h2>Account Status</h2>
+<div class="card">
+  <p>Your account is <span id="account-status">{% if public %}public&nbsp;{% else %}private{% endif %}</span>
+    <label class="switch">
+      <input type="checkbox">
+      <span class="slider round"></span>
+    </label>
+    <script>
+      if ("{{ public }}" != 0) {
+        $(".switch input").prop("checked", true);
+      }
+    </script>
+  </p>
+</div>
+{% endblock %}

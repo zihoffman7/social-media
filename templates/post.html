@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<h1>Create a Post</h1>
+{% endblock %}
+
+{% block content %}
+<div class="card">
+  {% if allowed %}
+  <form method="POST" id="post-form" enctype="multipart/form-data">
+    <input type="file" name="image" accept="image/*" hidden id="post-image">
+    <p style="text-align: center;"><input type="text" name="title" maxlength="24" placeholder="Title (optional)" autocomplete="off"></p>
+    <p style="text-align: center;"><input type="text" name="caption" maxlength="100" placeholder="Caption (optional)" autocomplete="off"></p>
+    <div id="image-drop">
+      <p>Drop an image</p>
+    </div>
+    <p style="text-align: center;"><input type="submit" value="Post" class="submit-button"></p>
+  </form>
+  {% else %}
+  <p>You have reached your max of 30 posts.  Please delete one before you post again.</p>
+  {% endif %}
+</div>
+{% endblock %}

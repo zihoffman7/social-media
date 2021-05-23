@@ -1,0 +1,45 @@
+-- DROP TABLE IF EXISTS users;
+-- DROP TABLE IF EXISTS follows;
+-- DROP TABLE IF EXISTS follow_requests;
+-- DROP TABLE IF EXISTS posts;
+-- DROP TABLE IF EXISTS comments;
+-- DROP TABLE IF EXISTS likes;
+
+CREATE TABLE IF NOT EXISTS users (
+  username VARCHAR(24) NOT NULL,
+  password VARCHAR(256) NOT NULL,
+  public VARCHAR(1) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS follows (
+  follower VARCHAR(24) NOT NULL,
+  following VARCHAR(24) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS follow_requests (
+  requester VARCHAR(24) NOT NULL,
+  requestee VARCHAR(24) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS posts (
+  user VARCHAR(24) NOT NULL,
+  filepath TEXT NOT NULL,
+  seconds TEXT NOT NULL,
+  id VARCHAR(36) NOT NULL,
+  title VARCHAR(24),
+  caption VARCHAR(100)
+);
+
+CREATE TABLE IF NOT EXISTS comments (
+  postid VARCHAR(36) NOT NULL,
+  user VARCHAR(24) NOT NULL,
+  content VARCHAR(100),
+  seconds TEXT NOT NULL,
+  commentid VARCHAR(36) NOT NULL,
+  edited VARCHAR(1) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS likes (
+  id VARCHAR(36) NOT NULL,
+  user VARCHAR(24) NOT NULL
+);

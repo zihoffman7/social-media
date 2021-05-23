@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<h1>{{ user }}</h1>
+{% endblock %}
+
+{% block content %}
+<div class="card">
+  {% if public %}
+  <p>This account is public</p>
+  {% else %}
+  <p>This account is private</p>
+  {% endif %}
+  <p>Followers: {{ followers }}</p>
+  <p>Following: {{ following }}</p>
+</div>
+<h2>Posts</h2>
+{% if private %}
+<div class="card">
+  <p>{{ user }}'s posts are hidden since their account is private</p>
+</div>
+{% else %}
+{% if posts|length > 0 %}
+{% for post in posts %}
+<div class="post card" id="{{ post[3] }}">
+  {% if username == post[0] %}
+  <form method="POST" action="{{ url_for('main.delete_post') }}" class="delete-post-form">
+    <input hidden value="{{ post[3] }}" name="id">
+    <input hidden class="url-hidden-input" name="url">
+    <div class="tooltip">
+      <input type="submit" value="-" class="delete-post-button">
+      <div class="tooltiptext">Delete post</div>
+    </div>
+  </form>
+  {% endif %}
+  <div>
+    <h3>
+      {% if not post[0] == username %}
+      <a href="{{ url_for('main.user_profile', user=post[0])}}" class="hide-link">{{ post[0] }}</a>
+      {% else %}
+      You
+      {% endif %}
+    </h3>
+    <p class="small">{{ post[2] }}</p>
+  </div>
+
+  <abbr title="{{ post[4] }}">
+    <img src="../{{ post[1] }}" class="image-post">
+  </abbr>
+
+  <p class="like-container">
+    <span>
+      {% if post[8] %}
+      <img src="{{ url_for('static', filename='icons/likeheart.png') }}" width="20" class="like-button" data-id="{{ post[3] }}">
+      <img src="{{ url_for('static', filename='lightheart.png') }}" width="20" hidden class="like-button" data-id="{{ post[3] }}">
+      {% else %}
+      <img src="{{ url_for('static', filename='icons/likeheart.png') }}" width="20" hidden class="like-button" data-id="{{ post[3] }}">
+      <img src="{{ url_for('static', filename='icons/lightheart.png') }}" width="20" class="like-button" data-id="{{ post[3] }}">
+      {% endif %}
+    </span>
+    Likes: <span class="like-count">{{ post[7] }}</span>
+  </p>
+  {% if post[5] %}
+  <div class="comment-content">
+    <p style="margin: 10px auto 0;">{{ post[5] }}</p>
+  </div>
+  {% endif %}
+  <form method="POST" class="comment-form" action="{{ url_for('main.comment') }}">
+    <input hidden value="{{ post[3] }}" name="id">
+    <input hidden class="url-hidden-input" name="url">
+    <p class="comment-send-box">
+      <input type="text" name="comment" placeholder="Comment" autocomplete="off" maxlength="100">
+      <input type="submit" value="&#8593;" class="comment-button">
+    </p>
+  </form>
+  <div class="comment-box">
+    <div class="comment-box-first-5">
+      {% for comment in post[6][:2] %}
+      <div class="comment-content">
+        <h4>
+          {% if not comment[1] == username %}
+          <a href="{{ url_for('main.user_profile', user=comment[1])}}" class="hide-link">{{ comment[1] }}</a>
+          {% else %}
+          You
+          <div class="dropdown">
+            <img src="{{ url_for('static', filename='icons/dots.png') }}" width="20" class="comment-options">
+            <div class="dropdown-content">
+              <span class="edit-comment">Edit</span>
+              <span class="delete-comment">Delete</span>
+            </div>
+          </div>
+          {% endif %}
+          <div hidden class="hidden-comment-data"><span class="post-id">{{ post[3] }}</span><span class="comment-id">{{ comment[4] }}</span><input class="url-hidden-input"></div>
+          <span class="small"><em>{{ comment[3] }}</em>: {% if comment[5] == "1" %}edited{% endif %}</span>
+        </h4>
+        <p>{{ comment[2] }}</p>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="comment-box-last" hidden>
+      {% for comment in post[6][2:] %}
+      <div class="comment-content">
+        <h4>
+          {% if not comment[1] == username %}
+          <a href="{{ url_for('main.user_profile', user=comment[1])}}" class="hide-link">{{ comment[1] }}</a>
+          {% else %}
+          You
+          <div class="dropdown">
+            <img src="{{ url_for('static', filename='icons/dots.png') }}" width="20" class="comment-options">
+            <div class="dropdown-content">
+              <span class="edit-comment">Edit</span>
+              <span class="delete-comment">Delete</span>
+            </div>
+          </div>
+          {% endif %}
+          <div hidden class="hidden-comment-data"><span class="post-id">{{ post[3] }}</span><span class="comment-id">{{ comment[4] }}</span><input class="url-hidden-input"></div>
+          <span class="small"><em>{{ comment[3] }}</em>: {% if comment[5] == 1%}edited{% endif %}</span>
+        </h4>
+        <p>{{ comment[2] }}</p>
+      </div>
+      {% endfor %}
+    </div>
+    {% if post[6]|length > 2 %}
+    <p><button class="remaining-comments-button long-button small">Show remaining comments</button></p>
+    {% endif %}
+  </div>
+</div>
+{% endfor %}
+{% else %}
+<div class="card">
+  <p>{{ user }} has no posts</p>
+</div>
+{% endif %}
+{% endif %}
+<script>
+  for (item of document.getElementsByClassName("url-hidden-input")) {
+    item.setAttribute("value", window.location);
+  }
+</script>
+{% endblock %}}

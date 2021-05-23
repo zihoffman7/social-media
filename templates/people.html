@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<h1>Following Data</h1>
+{% endblock %}
+
+{% block content %}
+<div class="card">
+  <p>Followers: {{ followers }}</p>
+  <p>Following: {{ following }}</p>
+</div>
+
+<div class="card">
+  <h3 style="margin-top: 8px;">Search users</h3>
+  <form method="POST" id="follow-request" spellcheck="false">
+    <p><input type="text" name="user" maxlength="24" autocomplete="off" placeholder="Username"></p>
+  </form>
+  <div id="users"></div>
+</div>
+
+<script>
+  var people = {{ people|tojson }};
+</script>
+
+<h2>Followers</h2>
+<div class="card">
+  <p><span class="p-click" id="followers-button">Show followers</span></p>
+  <div id="followers-list"></div>
+</div>
+
+<h2>Following</h2>
+<div class="card">
+  <p><span id="following-button" class="p-click">Show following</span></p>
+  <div id="following-list"></div>
+</div>
+
+<h3>Your follow requests</h3>
+<div id="pending-requests" class="card">
+  {% if requests|length > 0 %}
+  {% for i in requests %}
+  <p>{{ i[0] }} <button class="deny deny-button" data-user="{{ i[0] }}">Deny</button> <button class="accept accept-button" data-user="{{ i[0] }}">Accept</button></p>
+  {% endfor %}
+  {% else %}
+  <p>Nothing here!</p>
+  {% endif %}
+</div>
+
+<h3>You have requested</h3>
+<div id="requested-users" class="card">
+  {% if myrequests|length > 0 %}
+  {% for i in myrequests %}
+    <p>{{ i[0] }}  <button class="unrequest deny-button" data-user="{{ i[0] }}">Unrequest</button></p>
+  {% endfor %}
+  {% else %}
+  <p>Nothing here!</p>
+  {% endif %}
+</div>
+{% endblock %}

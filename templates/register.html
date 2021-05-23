@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<h1>Register</h1>
+{% endblock %}
+
+{% block content %}
+<form method="POST" id="register-form" class="card">
+  <p><input type="text" name="username" maxlength="24" placeholder="Username" autocomplete="off" id="create-username"></p>
+  <p><input type="password" name="p1" maxlength="256" placeholder="Password"></p>
+  <p><input type="password" name="p2" maxlength="256" placeholder="Confirm password"></p>
+  <p class="small">Have an account already?  <a href="{{ url_for('main.login') }}">Log in</a></p>
+  <p><input type="submit" value="Register" class="submit-button"></p>
+</form>
+{% endblock %}
